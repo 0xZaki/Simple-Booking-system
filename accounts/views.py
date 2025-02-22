@@ -15,7 +15,7 @@ class CustomLoginView(LoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('core:home')
+            return redirect('booking:home')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -24,7 +24,7 @@ class RegisterView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('core:home')
+            return redirect('bookings:home')
         form = CustomUserCreationForm()
         return render(request, self.template_name, {'form': form})
 

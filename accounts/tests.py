@@ -42,7 +42,7 @@ class RegisterViewTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse('accounts:register'))
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('core:home'))
+        self.assertRedirects(response, reverse('bookings:home'))
 
 
 class LoginViewTest(TestCase):
@@ -60,7 +60,7 @@ class LoginViewTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse('accounts:login'))
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('core:home'))
+        self.assertRedirects(response, reverse('bookings:home'))
 
 
 class LogoutViewTest(TestCase):

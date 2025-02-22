@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="text-align: center;">
+    <h1>Facilities</h1>
+</div>
+
+<div style="display: flex; justify-content: center;">
+    <table class="table" style="width: 80%;">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Location</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for facility in facilities %}
+        <tr>
+            <td>{{ facility.name }}</td>
+            <td>{{ facility.location }}</td>
+            <td>
+                <a href="{% url 'bookings:booking-create' %}?facility={{ facility.pk }}" class="btn btn-sm btn-success">
+                    Book Now
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="text-align: center;">
+    <h1>Bookings</h1>
+</div>
+<div style="text-align: center;">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+</div>
+<div style="display: flex; justify-content: center;">
+    <table class="table" style="width: 80%;">
+        <thead>
+        <tr>
+            <th scope="col">Facility</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% if not bookings %}
+        <tr>
+            <td colspan="5" class="text-center">
+                <div class="alert alert-info mb-0">
+                    You don't have any bookings yet.
+                    <a href="{% url 'bookings:facility-list' %}">Browse facilities</a> to make a booking.
+                </div>
+            </td>
+        </tr>
+        {% endif %}
+
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.facility.name }}</td>
+            <td>{{ booking.date }}</td>
+            <td>{{ booking.start_time }} - {{ booking.end_time }}</td>
+            <td>
+                <span class="badge {% if booking.status == 'confirmed' %}bg-success
+                                 {% elif booking.status == 'pending' %}bg-warning
+                                 {% else %}bg-danger{% endif %}">
+                    {{ booking.status|title }}
+                </span>
+            </td>
+            <td>
+                {% if booking.status == 'confirmed' %}
+                <form method="post" action="{% url 'bookings:booking-cancel' booking.pk %}"
+                      style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+
