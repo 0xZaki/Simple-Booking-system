@@ -15,7 +15,7 @@ class CustomLoginView(LoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('booking:home')
+            return redirect('bookings:home')
         return super().dispatch(request, *args, **kwargs)
 
 

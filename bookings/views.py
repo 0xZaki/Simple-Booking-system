@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
@@ -5,15 +7,17 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView
-from .tasks import send_confirmation_email, send_cancellation_email
+
 from .forms import BookingForm
 from .models import Booking, Facility
+from .tasks import send_confirmation_email, send_cancellation_email
 
 
 # Facility Views
 class FacilityListView(LoginRequiredMixin, ListView):
     model = Facility
     context_object_name = 'facilities'
+
     template_name = 'bookings/facility_list.html'
 
 
@@ -43,9 +47,11 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        booking = super().form_valid(form)
         send_confirmation_email.delay(form.instance.pk)
+        logging.info(f"Booking created successfully with ID: {form.instance.pk}")
         messages.success(self.request, 'Booking created successfully! Email with booking details will be sent.')
-        return super().form_valid(form)
+        return booking
 
 
 class BookingCancelView(LoginRequiredMixin, View):
@@ -58,6 +64,6 @@ class BookingCancelView(LoginRequiredMixin, View):
             booking.status = "canceled"
             send_cancellation_email.delay(booking.pk)
             booking.save()
-
-        messages.success(request, "Booking has been canceled!")
+            logging.info(f"Booking canceled successfully with ID:{booking.pk}")
+            messages.success(request, "Booking has been canceled!")
         return HttpResponseRedirect(reverse_lazy("bookings:home"))
