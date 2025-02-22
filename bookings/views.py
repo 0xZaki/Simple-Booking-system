@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView
-
+from .tasks import send_confirmation_email, send_cancellation_email
 from .forms import BookingForm
 from .models import Booking, Facility
 
@@ -43,14 +43,21 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        messages.success(self.request, 'Booking created successfully!')
+        send_confirmation_email.delay(form.instance.pk)
+        messages.success(self.request, 'Booking created successfully! Email with booking details will be sent.')
         return super().form_valid(form)
 
 
 class BookingCancelView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         booking = get_object_or_404(Booking, pk=kwargs["pk"], user=request.user)
-        booking.status = "canceled"
-        booking.save()
+        if booking.status != "confirmed":
+            messages.error(request, "You can only cancel confirmed bookings.")
+            return HttpResponseRedirect(reverse_lazy("bookings:home"))
+        else:
+            booking.status = "canceled"
+            send_cancellation_email.delay(booking.pk)
+            booking.save()
+
         messages.success(request, "Booking has been canceled!")
         return HttpResponseRedirect(reverse_lazy("bookings:home"))
