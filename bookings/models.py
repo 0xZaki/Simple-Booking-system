@@ -38,4 +38,10 @@ class Booking(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='confirmed')
 
     class Meta:
-        unique_together = ['facility', 'date', 'start_time']
+        verbose_name_plural = 'Bookings'
+        indexes = [
+            models.Index(fields=['user'])
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.facility.name} - {self.date}"
