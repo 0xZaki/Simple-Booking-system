@@ -1,13 +1,39 @@
-<html>
-    <head>
-        <title>Login</title>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4" style="width: 100%; max-width: 400px;">
+        <h2 class="text-center mb-4">Login</h2>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ field|capfirst }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                {{ form.password }}
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
-        <p>Don't have an account? <a href="{% url 'accounts:register' %}">Register</a></p>
-    </body>
-</html>
+        <p class="text-center mt-3">
+            Don't have an account? <a href="{% url 'accounts:register' %}">Register</a>
+        </p>
+    </div>
+</div>
+
+{% endblock %}

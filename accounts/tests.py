@@ -8,7 +8,7 @@ User = get_user_model()
 class RegisterViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser', password='testpassword'
+            username='testuser', password='testpassword', email='test1@test.com'
         )
 
     def test_register_page(self):
@@ -19,6 +19,7 @@ class RegisterViewTest(TestCase):
     def test_register_success(self):
         form_data = {
             'username': 'testuser2',
+            'email': 'test2@test.com',
             'password1': 'testpassword2',
             'password2': 'testpassword2',
         }
@@ -31,12 +32,14 @@ class RegisterViewTest(TestCase):
             'username': 'testuser',
             'password1': 'testpassword',
             'password2': 'testpassword2',
+            'email': 'test1@test.com'
         }
         response = self.client.post(reverse('accounts:register'), form_data)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'accounts/register.html')
         self.assertIn("password2", response.context['form'].errors)
         self.assertIn('username', response.context['form'].errors)
+        self.assertIn('email', response.context['form'].errors)
 
     def test_redirect_if_logged_in(self):
         self.client.force_login(self.user)

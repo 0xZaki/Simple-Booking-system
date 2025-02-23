@@ -40,7 +40,7 @@ class BookingListViewTest(TestCase):
 class BookingCancelViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser', password='testpassword'
+            username='testuser', password='testpassword', email='test1@test.com'
         )
         self.client.force_login(self.user)
         Facility.objects.create(name='Test Facility', location='Test Location', capacity=10)
@@ -65,7 +65,7 @@ class BookingCancelViewTest(TestCase):
 
     def test_cancel_another_users_booking(self):
         another_user = User.objects.create_user(
-            username='anotheruser', password='testpassword'
+            username='anotheruser', password='testpassword', email='test2@test.com'
         )
         self.client.force_login(another_user)
         response = self.client.post(reverse('bookings:booking-cancel', args=[self.booking.pk]))
@@ -75,7 +75,7 @@ class BookingCancelViewTest(TestCase):
 class BookingCreateViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser', password='testpassword'
+            username='testuser', password='testpassword', email='test1@test.com'
         )
         self.client.force_login(self.user)
         self.facility = Facility.objects.create(name='Test Facility', location='Test Location', capacity=1)
@@ -151,7 +151,7 @@ class BookingCreateViewTest(TestCase):
 class FacilityListViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser', password='testpassword'
+            username='testuser', password='testpassword', email='test1@test.com'
         )
         self.client.force_login(self.user)
         Facility.objects.create(name='Test Facility', location='Test Location', capacity=10)
