@@ -1,0 +1,95 @@
+[
+  {
+    "model": "bookings.facility",
+    "pk": 1,
+    "fields": {
+      "name": "KFC",
+      "location": "5 st Cairo",
+      "capacity": 10,
+      "created_at": "2025-02-23T22:16:38.939Z",
+      "updated_at": "2025-02-23T22:16:38.939Z"
+    }
+  },
+  {
+    "model": "bookings.facility",
+    "pk": 2,
+    "fields": {
+      "name": "Starbucks",
+      "location": "45 yazeedy st ,Alexandria",
+      "capacity": 40,
+      "created_at": "2025-02-23T22:17:11.423Z",
+      "updated_at": "2025-02-23T22:17:11.423Z"
+    }
+  },
+  {
+    "model": "bookings.facility",
+    "pk": 3,
+    "fields": {
+      "name": "Kick",
+      "location": "New cairo",
+      "capacity": 10,
+      "created_at": "2025-02-23T22:17:31.311Z",
+      "updated_at": "2025-02-23T22:17:31.311Z"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "facility": 1,
+      "date": "2025-02-25",
+      "start_time": "15:17:00",
+      "end_time": "18:20:00",
+      "status": "confirmed"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "facility": 1,
+      "date": "2025-02-26",
+      "start_time": "15:17:00",
+      "end_time": "18:20:00",
+      "status": "confirmed"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 3,
+    "fields": {
+      "user": 1,
+      "facility": 2,
+      "date": "2025-02-27",
+      "start_time": "13:20:00",
+      "end_time": "14:20:00",
+      "status": "canceled"
+    }
+  },
+    {
+    "model": "bookings.booking",
+    "pk": 4,
+    "fields": {
+      "user": 1,
+      "facility": 2,
+      "date": "2025-03-01",
+      "start_time": "13:20:00",
+      "end_time": "14:20:00",
+      "status": "confirmed"
+    }
+  },
+      {
+    "model": "bookings.booking",
+    "pk": 4,
+    "fields": {
+      "user": 1,
+      "facility": 2,
+      "date": "2025-02-20",
+      "start_time": "13:20:00",
+      "end_time": "14:20:00",
+      "status": "confirmed"
+    }
+  }
+]
