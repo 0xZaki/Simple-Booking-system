@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -29,7 +30,13 @@ class BookingListView(LoginRequiredMixin, ListView):
     ordering = ['-date', '-start_time']
 
     def get_queryset(self):
-        return Booking.objects.filter(user=self.request.user)
+        booking = Booking.objects.filter(user=self.request.user)
+        for b in booking:
+            if b.status == 'confirmed' and datetime.combine(b.date, b.start_time) >= datetime.now():
+                b.cancellable = True
+            else:
+                b.cancellable = False
+        return booking
 
 
 class BookingCreateView(LoginRequiredMixin, CreateView):
@@ -60,6 +67,8 @@ class BookingCancelView(LoginRequiredMixin, View):
         if booking.status != "confirmed":
             messages.error(request, "You can only cancel confirmed bookings.")
             return HttpResponseRedirect(reverse_lazy("bookings:home"))
+        elif datetime.combine(booking.date, booking.start_time) < datetime.now():
+            messages.error(request, "You can only cancel bookings that have not started yet.")
         else:
             booking.status = "canceled"
             send_cancellation_email.delay(booking.pk)

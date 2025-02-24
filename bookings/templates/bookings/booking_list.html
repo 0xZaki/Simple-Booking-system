@@ -48,7 +48,7 @@
                 </span>
             </td>
             <td>
-                {% if booking.status == 'confirmed' %}
+                {% if booking.cancellable %}
                 <form method="post" action="{% url 'bookings:booking-cancel' booking.pk %}"
                       style="display: inline;">
                     {% csrf_token %}
